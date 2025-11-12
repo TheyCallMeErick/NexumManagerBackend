@@ -4,10 +4,25 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+
+    <!-- API -->
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.5.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
+
+    <!-- TESTS -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="xunit" Version="2.9.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="2.5.6" />
+    <PackageVersion Include="Bogus" Version="35.6.5" />
+
+    <!-- EF CORE -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.11" />
+
+    <!-- Identity -->
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.11" />
+
   </ItemGroup>
 </Project>

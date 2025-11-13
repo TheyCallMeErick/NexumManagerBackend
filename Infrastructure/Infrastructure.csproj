@@ -20,5 +20,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="BCrypt.Net-Next" />
+    <PackageReference Include="Serilog.Sinks.MongoDB" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.AspNetCore" />
   </ItemGroup>
 </Project>

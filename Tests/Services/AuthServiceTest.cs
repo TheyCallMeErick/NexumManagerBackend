@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Tests.Fakers;
 
-namespace Tests; 
+namespace Tests.Services; 
 
 public class AuthServiceTests : IDisposable
 {

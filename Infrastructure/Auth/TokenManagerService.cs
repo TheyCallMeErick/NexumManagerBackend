@@ -30,7 +30,7 @@ public class TokenManagerService : ITokenManagerService
             return null;
         }
         var jwtSettings = configuration.GetSection("JwtSettings");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["JWT_SECRET_KEY"] ?? string.Empty));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? string.Empty));
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Username),

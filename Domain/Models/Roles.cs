@@ -1,8 +1,6 @@
 namespace Domain.Models; 
 
-public static class Roles
+public class Roles : BaseModel
 {
-    public static string ADMIN = "ADMIN";
-    public static string MEMBER = "MEMBER";
-
+    public string Title { get; set; }
 }

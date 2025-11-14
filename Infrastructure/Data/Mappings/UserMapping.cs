@@ -17,7 +17,7 @@ public class UserMapping : IEntityTypeConfiguration<User>
         builder.Property(e => e.Name)
           .HasMaxLength(255);
 
-        builder.Property(e => e.Password)
+        builder.Property(e => e.PasswordHash)
               .IsRequired();
 
         builder.Property(e => e.ProfilePictureFileName)

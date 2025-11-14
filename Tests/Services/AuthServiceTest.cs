@@ -38,7 +38,7 @@ public class AuthServiceTests : IDisposable
     {
         // Arrange
         var user = UserFaker.Make().Generate();
-        user.Password = BCrypt.Net.BCrypt.HashPassword("TestPassword");
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword("TestPassword");
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
 
@@ -62,7 +62,7 @@ public class AuthServiceTests : IDisposable
     {
         // Arrange
         var user = UserFaker.Make().Generate();
-        user.Password = BCrypt.Net.BCrypt.HashPassword("TestPassword");
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword("TestPassword");
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
 
@@ -106,7 +106,7 @@ public class AuthServiceTests : IDisposable
     {
         // Arrange 
         var user = UserFaker.Make().Generate();
-        user.Password = BCrypt.Net.BCrypt.HashPassword("TestPassword");
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword("TestPassword");
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
 

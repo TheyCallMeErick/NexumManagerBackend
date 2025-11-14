@@ -8,16 +8,17 @@ public class UpdateProjectCommand
 {
     private readonly IProjectRepository _projectRepository;
 
-    public async Task Execute(UpdateProjectInputDTO dto)
+    public async Task<bool> Execute(UpdateProjectInputDTO dto)
     {
         var project = await _projectRepository.FindById(dto.projectId);
         if (project == null)
         {
-            return;
+            return false;
         }
         project.Title = dto.ProjectName;
         project.Description = dto.ProjectDescription;
 
         await _projectRepository.Update(project);
+        return true;
     }
 }

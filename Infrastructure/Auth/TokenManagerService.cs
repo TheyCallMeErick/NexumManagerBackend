@@ -23,18 +23,14 @@ public class TokenManagerService : ITokenManagerService
         this.context = context;
     }
 
-    public string? GenerateAccessToken(User user)
+    public string GenerateAccessToken(User user)
     {
-        if(user == null || user.Username == null || user.Email == null)
-        {
-            return null;
-        }
         var jwtSettings = configuration.GetSection("JwtSettings");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? string.Empty));
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.Username!),
+            new Claim(ClaimTypes.Email, user.Email!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
         };

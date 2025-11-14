@@ -31,7 +31,7 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project?> FindById(Guid id)
     {
-        return await applicationDbContext.Projects.FirstOrDefaultAsync(x=>x.Id == id);
+        return await applicationDbContext.Projects.Include(x=>x.Members).FirstOrDefaultAsync(x=>x.Id == id);
     }
 
     public async Task<bool> Delete(Project project)

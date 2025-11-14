@@ -41,7 +41,7 @@ public class AuthService : IAuthService
                 .FailureResult("Invalid email or password.");
         }
 
-        var isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
+        var isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);
         if (!isPasswordValid)
         {
             return OperationResultDTO<UserAuthOutputDTO>

@@ -5,5 +5,5 @@ public class Project : BaseModel
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public IEnumerable<UserOnProject> Members { get; set; } = new List<UserOnProject>();
-
+    public ICollection<UserInviteToProject> Invites { get; set; } = new List<UserInviteToProject>();
 }

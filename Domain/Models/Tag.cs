@@ -1,11 +1,6 @@
 namespace Domain.Models; 
 
-public class Tag
+public class Tag : BaseModel
 {
-    public Tag()
-    {
-        // constructor logic here
-    }
-
-    // class members here
+    public string Description { get; set; } = string.Empty;
 }

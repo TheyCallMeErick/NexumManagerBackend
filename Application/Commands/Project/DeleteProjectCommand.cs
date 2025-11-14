@@ -7,13 +7,19 @@ public class DeleteProjectCommand
 {
     private readonly IProjectRepository _projectRepository;
 
-    public async Task Execute(Guid projectId, Guid userId)
+    public DeleteProjectCommand(IProjectRepository projectRepository)
+    {
+        _projectRepository = projectRepository;
+    }
+
+    public async Task<bool> Execute(Guid projectId, Guid userId)
     {
         var project = await _projectRepository.FindById(projectId);
         if (project == null)
         {
-            return;
+            return false;
         }
         await _projectRepository.Delete(project);
+        return true;
     }
 }

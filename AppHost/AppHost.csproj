@@ -12,4 +12,10 @@
     <ProjectReference Include="../Api/Api.csproj" />
   </ItemGroup>
 
+   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.MongoDB" />
+    <PackageReference Include="Aspire.Hosting.Valkey" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" />
+  </ItemGroup>
 </Project>

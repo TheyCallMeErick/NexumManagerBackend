@@ -38,4 +38,9 @@ public class TaskRepository : ITaskRepository
         await applicationDbContext.SaveChangesAsync();
         return true;
     }
+
+    public async Task<IEnumerable<Domain.Models.Task>> Query()
+    {
+        return await applicationDbContext.Tasks.ToListAsync();
+    }
 }

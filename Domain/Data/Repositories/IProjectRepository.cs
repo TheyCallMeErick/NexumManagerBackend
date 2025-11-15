@@ -7,6 +7,8 @@ public interface IProjectRepository
     public Task<Project> Create(Project project);
     public Task<Project> Update(Project project);
     public Task<Project?> FindById(Guid id);
+    public  Task<IEnumerable<Project>> Query();
+    
     public Task<bool> Delete(Project project);
 
 }

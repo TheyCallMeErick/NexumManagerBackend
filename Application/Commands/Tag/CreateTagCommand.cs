@@ -6,6 +6,4 @@ public class CreateTagCommand
     {
         // constructor logic here
     }
-
-    // class members here
 }

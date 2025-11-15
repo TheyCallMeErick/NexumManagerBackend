@@ -45,4 +45,8 @@ public class TagRepository : ITagRepository
         return true;
     }
 
+    public async Task<IEnumerable<Tag>> Query()
+    {
+        return applicationDbContext.Tags.ToList();
+    }
 }

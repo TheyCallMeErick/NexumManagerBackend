@@ -41,4 +41,8 @@ public class ProjectRepository : IProjectRepository
         return true;
     }
 
+    public async Task<IEnumerable<Project>> Query()
+    {
+        return await applicationDbContext.Projects.ToListAsync();
+    }
 }

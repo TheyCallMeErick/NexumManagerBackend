@@ -12,8 +12,8 @@ public class Task : BaseModel
     public Guid ProjectId { get; set; }
     public Project Project { get; set; }
 
-    public IEnumerable<Task> SubTasks { get; set; }
-    public IEnumerable<Attach> Attaches { get; set; }
-    public IEnumerable<UserOnProject> AssignedTo { get; set; }
-    public IEnumerable<Tag> Tags { get; set; }
+    public ICollection<Task> SubTasks { get; set; }
+    public ICollection<Attach> Attaches { get; set; }
+    public ICollection<User> AssignedTo { get; set; }
+    public ICollection<Tag> Tags { get; set; }
 }

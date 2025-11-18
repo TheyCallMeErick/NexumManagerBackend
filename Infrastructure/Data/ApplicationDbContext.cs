@@ -18,7 +18,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     public DbSet<Domain.Models.Task> Tasks { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<UserInviteToProject> UserInvites { get; set; }
+    public DbSet<UserOnProject> UsersOnProjects { get; set; }
 
-
-
+    
 }

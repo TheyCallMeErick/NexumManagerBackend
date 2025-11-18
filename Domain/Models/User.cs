@@ -14,4 +14,5 @@ public class User : BaseModel
 
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public ICollection<UserInviteToProject> Invites { get; set; } = new List<UserInviteToProject>();
+    public ICollection<UserOnProject> Projects { get; set; } = new List<UserOnProject>();
 }

@@ -44,7 +44,7 @@ public class CreateTaskCommand
             return false;
         }
 
-        var members = project.Members.Where(x => dTO.UsersAssigned.Contains(x.UserId ));
+        var members = project.Members.Where(x => dTO.UsersAssigned.Contains(x.UserId )).Select(x=>x.User).ToList();
 
         var task = new Domain.Models.Task
         {
@@ -52,7 +52,7 @@ public class CreateTaskCommand
             Title = dTO.Title,
         };
         task.Description = dTO.Description ?? "";
-        task.Tags = tags;
+        task.Tags = tags.ToList();
         task.StartDate = dTO.StartDate;
         task.StartDate = dTO.DeadLine;
         task.Priority = dTO.Priority;

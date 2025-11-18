@@ -2,11 +2,11 @@ using Domain.Data.Repositories;
 
 namespace Application.Queries.Task; 
 
-public class QueryAll
+public class FindAllTasksQuery
 {
     private readonly ITaskRepository _taskRepository;
 
-    public QueryAll(ITaskRepository taskRepository)
+    public FindAllTasksQuery(ITaskRepository taskRepository)
     {
         _taskRepository = taskRepository;
     }

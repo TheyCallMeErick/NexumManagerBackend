@@ -2,11 +2,11 @@ using Domain.Data.Repositories;
 
 namespace Application.Queries.Project; 
 
-public class QueryAllProjects
+public class FindAllProjectsQuery
 {
     private readonly IProjectRepository _projectRepository;
 
-    public QueryAllProjects()
+    public FindAllProjectsQuery()
     {
         // constructor logic here
     }

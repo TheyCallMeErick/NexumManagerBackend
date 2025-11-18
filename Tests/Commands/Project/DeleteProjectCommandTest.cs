@@ -1,12 +1,15 @@
 using Application.Commands.Project;
 using Application.DTOs.Inputs.Project;
 using Domain.Data.Repositories;
+using Domain.Enums;
+using Domain.Models;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Tests.Fakers;
 using Tests.Utils;
+using Task = System.Threading.Tasks.Task;
 
-namespace Tests.Commands.Project; 
+namespace Tests.Commands.Project;
 
 public class DeleteProjectCommandTest
 {
@@ -26,11 +29,17 @@ public class DeleteProjectCommandTest
     {
         //Arrange
         var createData = ProjectFaker.Make().Generate();
+        var member = new UserOnProject
+        {
+            Role = EProjectRole.Admin,
+            User= UserFaker.Make().Generate()
+        };
+        createData.Members.Add(member);
         var data = await _dbContext.Projects.AddAsync(createData);
         await _dbContext.SaveChangesAsync();
 
         //Act
-        var result = await _DeleteProjectCommand.Execute(data.Entity.Id, Guid.NewGuid());
+        var result = await _DeleteProjectCommand.Execute(data.Entity.Id, member.User.Id);
 
         //Assert 
         Assert.True(result);
@@ -51,7 +60,7 @@ public class DeleteProjectCommandTest
 
         //Assert 
         Assert.False(result);
-        Assert.Empty(_dbContext.Projects.ToList());
+        Assert.NotEmpty(_dbContext.Projects.ToList());
         Assert.Equal(1, _dbContext.Projects.Count());
     }
 }

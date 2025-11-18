@@ -2,11 +2,11 @@ using Domain.Data.Repositories;
 
 namespace Application.Queries.Task; 
 
-public class QueryById
+public class FindByIdQuery
 {
     private readonly ITaskRepository _taskRepository;
 
-    public QueryById(ITaskRepository taskRepository)
+    public FindByIdQuery(ITaskRepository taskRepository)
     {
         _taskRepository = taskRepository;
     }

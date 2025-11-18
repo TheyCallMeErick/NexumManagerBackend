@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories; 
 
-public class UserRepository 
+public class UserRepository  : IUserRepository
 {
     private readonly ApplicationDbContext applicationDbContext;
 

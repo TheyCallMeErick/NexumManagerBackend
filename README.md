@@ -2,6 +2,15 @@
 > [!CAUTION]
 > This project is made only with the purposal for study Dotnet Aspire, RabbitMq and some clean archtecture concepts, this isn't planned as production ready app.
 
+## Requirements
+- .Net 10
+- Docker
+
+## Running the project locally
+1. Having docker and dotnet 10 installed, just go to AppHost folder `cd AppHost`
+2. Execute the application and dotnet aspire will take charge about running and orchestrating the containers `dotnet run`
+3. 🔥🔥LFG🔥🔥
+
 ## High level archtecture
 
 ```mermaid

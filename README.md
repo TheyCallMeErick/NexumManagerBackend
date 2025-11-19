@@ -11,6 +11,11 @@
 2. Execute the application and dotnet aspire will take charge about running and orchestrating the containers `dotnet run`
 3. 🔥🔥LFG🔥🔥
 
+
+> [!INFO]
+> Since the application is running at development enviorment, the application will auto apply migrations in the database, so you can just access `https://localhost:7281/scalar/v1` to get the Open API documentation.
+
+
 ## High level archtecture
 
 ```mermaid

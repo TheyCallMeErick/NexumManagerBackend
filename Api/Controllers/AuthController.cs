@@ -28,10 +28,10 @@ public class AuthController : ControllerBase
     {
         var result = await command.Execute(new UserCredentialsInputDto
         (
-            email: loginRequest.Email,
-            password: loginRequest.Password,
-            ip: HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty,
-            deviceInfo: HttpContext.Request.Headers["User-Agent"].ToString()
+            Email: loginRequest.Email,
+            Password: loginRequest.Password,
+            Ip: HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty,
+            DeviceInfo: HttpContext.Request.Headers["User-Agent"].ToString()
         ));
         if (!result.Success)
         {

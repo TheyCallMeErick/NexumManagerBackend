@@ -22,8 +22,8 @@ public static class InfrastructureServiceConfiguration
         services.AddLogging(builder =>
         {
             builder.ClearProviders();
-            builder.AddSerilog();
         });
+        services.AddSerilog();
         Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.MongoDBBson(mongoDbUrl, rollingInterval: Serilog.Sinks.MongoDB.RollingInterval.Day)

@@ -33,7 +33,7 @@
     <PackageVersion Include="Serilog.Sinks.MongoDB" Version="7.2.0" />
     <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.3" />
-
+    <PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
 
     <!-- SERVICE DEFAULTS -->
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />

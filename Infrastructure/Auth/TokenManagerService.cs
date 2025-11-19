@@ -12,16 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Auth; 
 
-public class TokenManagerService : ITokenManagerService
+public class TokenManagerService(IConfiguration configuration, ApplicationDbContext context) : ITokenManagerService
 {
-    private readonly IConfiguration configuration;
-    private readonly ApplicationDbContext context;
-
-    public TokenManagerService(IConfiguration configuration, ApplicationDbContext context)
-    {
-        this.configuration = configuration;
-        this.context = context;
-    }
 
     public string GenerateAccessToken(User user)
     {
@@ -65,10 +57,6 @@ public class TokenManagerService : ITokenManagerService
             return OperationResultDto<UserAuthOutputDto>.FailureResult("This refresh token has already been used to generate a new refresh token.");
         }
         var user = oldRefreshToken.User;
-        if (user == null)
-        {
-            return OperationResultDto<UserAuthOutputDto>.FailureResult("User associated with the refresh token not found.");
-        }
         var newRefreshToken = new RefreshToken
         {
             UserId = userId,
@@ -89,8 +77,8 @@ public class TokenManagerService : ITokenManagerService
             .SuccessResult()
             .WithData(new UserAuthOutputDto
             (
-                token: newAccessToken,
-                refreshToken: newRefreshToken.Token
+                AccessToken: newAccessToken,
+                RefreshToken: newRefreshToken.Token
             ));
     }
 

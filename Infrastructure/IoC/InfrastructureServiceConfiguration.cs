@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Sinks.MongoDB;
 
 namespace Infrastructure.IoC;
 
@@ -14,7 +13,7 @@ public static class InfrastructureServiceConfiguration
 {
     public static void ConfigureInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var mongoDbUrl = configuration.GetValue<string>("mongoDbUrl");
+        var mongoDbUrl = configuration.GetConnectionString("mongoDb" );
         if (mongoDbUrl == null)
         {
             throw new ArgumentException("Cannot connect to mongoDb");

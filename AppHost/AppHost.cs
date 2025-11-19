@@ -9,7 +9,8 @@ var postgres = builder.AddPostgres("pgsql", port: 5432)
 
 var mongo = builder.AddMongoDB("mongo")
     .WithDataVolume()
-    .WithMongoExpress();
+    .WithMongoExpress()
+    .AddDatabase("mongoDb");
 
 var rabbit = builder.AddRabbitMQ("rabbitmq", port: 5672);
 

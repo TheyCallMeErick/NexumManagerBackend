@@ -14,7 +14,6 @@ public class UpdateTaskCommand(ITagRepository tagRepository, ITaskRepository tas
             return false;
         }
 
-
         if (dto.UsersAssigned != null)
         {
             foreach (var user in dto.UsersAssigned)
@@ -25,7 +24,6 @@ public class UpdateTaskCommand(ITagRepository tagRepository, ITaskRepository tas
                 }
             }
         }
-
 
         if (task.Project.Members.FirstOrDefault(x =>
                 x.UserId == dto.UserCreating && (x.Role == EProjectRole.Admin || x.Role == EProjectRole.Manager)) ==

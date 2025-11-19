@@ -2,17 +2,10 @@ using Domain.Data.Repositories;
 
 namespace Application.Queries.Task; 
 
-public class FindAllTasksQuery
+public class FindAllTasksQuery(ITaskRepository taskRepository)
 {
-    private readonly ITaskRepository _taskRepository;
-
-    public FindAllTasksQuery(ITaskRepository taskRepository)
-    {
-        _taskRepository = taskRepository;
-    }
-
     public async Task<IEnumerable<Domain.Models.Task>> Execute()
     {
-        return await _taskRepository.Query();
+        return await taskRepository.Query();
     }
 }

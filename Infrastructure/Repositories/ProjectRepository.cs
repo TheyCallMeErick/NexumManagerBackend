@@ -6,15 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories; 
 
-public class ProjectRepository : IProjectRepository
+public class ProjectRepository(ApplicationDbContext applicationDbContext) : IProjectRepository
 {
-    private readonly ApplicationDbContext applicationDbContext;
-
-    public ProjectRepository(ApplicationDbContext applicationDbContext)
-    {
-        this.applicationDbContext = applicationDbContext;
-    }
-
     public async Task<Project> Create(Project project)
     {
         applicationDbContext.Projects.Add(project);

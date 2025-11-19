@@ -4,14 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories; 
 
-public class TaskRepository : ITaskRepository
+public class TaskRepository(ApplicationDbContext applicationDbContext) : ITaskRepository
 {
-    private readonly ApplicationDbContext applicationDbContext;
-
-    public TaskRepository(ApplicationDbContext applicationDbContext)
-    {
-        this.applicationDbContext = applicationDbContext;
-    }
 
     public async Task<Domain.Models.Task> Create(Domain.Models.Task task)
     {

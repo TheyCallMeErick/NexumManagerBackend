@@ -5,15 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories; 
 
-public class UserOnProjectRepository  : IUserOnProjectRepository
+public class UserOnProjectRepository(ApplicationDbContext applicationDbContext) : IUserOnProjectRepository
 {
-    private readonly ApplicationDbContext applicationDbContext;
-
-    public UserOnProjectRepository(ApplicationDbContext applicationDbContext)
-    {
-        this.applicationDbContext = applicationDbContext;
-    }
-
     public async Task<UserOnProject> Create(UserOnProject userOnProject)
     {
         applicationDbContext.UsersOnProjects.Add(userOnProject);

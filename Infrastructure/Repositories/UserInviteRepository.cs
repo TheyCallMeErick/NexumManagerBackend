@@ -5,15 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories; 
 
-public class UserInviteRepository : IUserInviteRepository
+public class UserInviteRepository(ApplicationDbContext applicationDbContext) : IUserInviteRepository
 {
-   private readonly ApplicationDbContext applicationDbContext;
-
-    public UserInviteRepository(ApplicationDbContext applicationDbContext)
-    {
-        this.applicationDbContext = applicationDbContext;
-    }
-
     public async Task<UserInviteToProject> Create(UserInviteToProject UserInvite)
     {
         applicationDbContext.UserInvites.Add(UserInvite);

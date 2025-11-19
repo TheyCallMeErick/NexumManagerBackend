@@ -1,9 +1,35 @@
-namespace Application.Commands.Tag; 
+using Application.DTOs.Inputs.Tag;
+using Domain.Data.Repositories;
+using Domain.Enums;
 
-public class CreateTagCommand
+namespace Application.Commands.Tag;
+
+public class CreateTagCommand(ITagRepository tagRepository, IProjectRepository projectRepository)
 {
-    public CreateTagCommand()
+    public async Task<bool> Execute(CreateTagDto dto)
     {
-        // constructor logic here
+        var project = await projectRepository.FindById(dto.ProjectId);
+        if (project == null)
+        {
+            return false;
+        }
+
+        var canCurrentUserCreateTag = project
+            .Members
+            .Any(m => m.UserId == dto.CurrentUserId
+                      && m.Role is EProjectRole.Admin or EProjectRole.Manager
+            );
+        if (!canCurrentUserCreateTag)
+        {
+            return false;
+        }
+        await tagRepository.Create(new Domain.Models.Tag
+        {
+            Description = dto.Description,
+            Project =  project
+        });
+        return true;
     }
 }
+
+

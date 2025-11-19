@@ -5,15 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories; 
 
-public class TagRepository : ITagRepository
+public class TagRepository(ApplicationDbContext applicationDbContext) : ITagRepository
 {
-    private readonly ApplicationDbContext applicationDbContext;
-
-    public TagRepository(ApplicationDbContext applicationDbContext)
-    {
-        this.applicationDbContext = applicationDbContext;
-    }
-
     public async Task<Tag> Create(Tag tag)
     {
         applicationDbContext.Tags.Add(tag);
@@ -47,6 +40,6 @@ public class TagRepository : ITagRepository
 
     public async Task<IEnumerable<Tag>> Query()
     {
-        return applicationDbContext.Tags.ToList();
+        return await applicationDbContext.Tags.ToListAsync();
     }
 }

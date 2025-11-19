@@ -1,9 +1,11 @@
 using Application.DTOs.Inputs.Auth;
+using Application.Options;
 using Application.Services.Interfaces;
 using Infrastructure.Auth;
 using Infrastructure.Data;
+using Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Tests.Fakers;
 
 namespace Tests.Services; 
@@ -17,17 +19,9 @@ public class AuthServiceTests : IDisposable
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
-        var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                { "JwtSettings:SecretKey", Guid.NewGuid().ToString() },
-                { "JwtSettings:ExpirationTimeInMinutes", "60" },
-                { "JwtSettings:Issuer", "issuer" },
-                { "JwtSettings:Audience", "audience" }
-            })
-            .Build();
         _dbContext = new ApplicationDbContext(options);
-        var tokenManagerService = new TokenManagerService(configuration, _dbContext);
+        var jwtOptions = new JwtOptions("60", "issuer", "audience", Guid.NewGuid().ToString());
+        var tokenManagerService = new TokenManagerService(_dbContext, new JwtSettings(Options.Create(jwtOptions)));
 
         _authService = new AuthService(_dbContext, tokenManagerService);
     }

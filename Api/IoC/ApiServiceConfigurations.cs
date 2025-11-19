@@ -33,8 +33,8 @@ public static class ApiServiceConfigurations
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
-                        configuration.GetSection("JwtSettings")["JWT_SECRET_KEY"] ??
-                        throw new Exception("The JWT_SECRET_KEY is null"))),
+                        configuration.GetSection("Jwt")["SecretKey"] ??
+                        throw new Exception("The Jwt SecretKey is null"))),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };

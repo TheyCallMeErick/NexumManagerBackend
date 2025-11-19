@@ -1,6 +1,7 @@
-using Domain.Models;
+using Application.Options;
+using Application.Options.Interfaces;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Identity;
+using Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,13 @@ public static class InfrastructureServiceConfiguration
             options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
         });
 
+        services
+            .AddOptions<JwtOptions>()
+            .Bind(configuration.GetSection("Jwt"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddSingleton<IJwtSettings, JwtSettings>();
     }
 
 }

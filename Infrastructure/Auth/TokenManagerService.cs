@@ -3,22 +3,21 @@ using System.Security.Claims;
 using System.Text;
 using Application.DTOs.Outputs;
 using Application.DTOs.Outputs.Auth;
+using Application.Options.Interfaces;
 using Application.Services.Interfaces;
 using Domain.Models;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Auth; 
 
-public class TokenManagerService(IConfiguration configuration, ApplicationDbContext context) : ITokenManagerService
+public class TokenManagerService(ApplicationDbContext context, IJwtSettings jwtOptions) : ITokenManagerService
 {
 
     public string GenerateAccessToken(User user)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? string.Empty));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey));
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Username!),
@@ -27,14 +26,12 @@ public class TokenManagerService(IConfiguration configuration, ApplicationDbCont
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
         };
 
-        var expirationTime = DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpirationTimeInMinutes"] ?? string.Empty));
-        var issuer = configuration.GetSection("JwtSettings")["Issuer"] ?? string.Empty;
-        var audience = configuration.GetSection("JwtSettings")["Audience"] ?? string.Empty;
+        var expirationTime = DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtOptions.ExpirationTimeInMinutes));
 
 
         var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
+            issuer: jwtOptions.Issuer,
+            audience:  jwtOptions.Audience,
             claims: claims,
             expires: expirationTime,
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)

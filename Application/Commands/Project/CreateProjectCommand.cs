@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.Threading.Tasks;
 using Application.DTOs.Inputs.Project;
 using Domain.Data.Repositories;
 using Domain.Enums;
@@ -7,23 +5,15 @@ using Domain.Models;
 
 namespace Application.Commands.Project; 
 
-public class CreateProjectCommand
+public class CreateProjectCommand(IProjectRepository projectRepository, IUserRepository userRepository)
 {
-    private readonly IProjectRepository _projectRepository;
-    private readonly IUserRepository _userRepository;
-    public CreateProjectCommand(IProjectRepository projectRepository, IUserRepository userRepository)
+    public async Task<bool> Execute(CreateProjectInputDto dto)
     {
-        _projectRepository = projectRepository;
-        _userRepository = userRepository;
-    }
-
-    public async Task<bool> Execute(CreateProjectInputDTO dto)
-    {
-        if(dto.ProjectName is null || dto.ProjectName.Length == 0)
+        if(dto.ProjectName.Length == 0)
         {
             return false;
         }
-        var user = await _userRepository.FindById(dto.CurrentUserId);
+        var user = await userRepository.FindById(dto.CurrentUserId);
 
         if (user == null)
         {
@@ -42,7 +32,7 @@ public class CreateProjectCommand
         };
         project.Members.Add(userOnProject);
 
-        await _projectRepository.Create(project);
+        await projectRepository.Create(project);
         return true;
     }
 }

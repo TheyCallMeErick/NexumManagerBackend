@@ -5,17 +5,10 @@ using Application.Services.Interfaces;
 
 namespace Application.Commands.Auth;
 
-public class RenewRefreshTokenCommand
+public class RenewRefreshTokenCommand(IAuthService authService)
 {
-    private readonly IAuthService _authService;
-
-    public RenewRefreshTokenCommand(IAuthService authService)
+    public async Task<OperationResultDto<UserAuthOutputDto>> Execute(RenewRefreshTokenInputDto dto)
     {
-        _authService = authService;
-    }
-
-    public async Task<OperationResultDTO<UserAuthOutputDTO>> Execute(RenewRefreshTokenInputDTO dto)
-    {
-        return await _authService.RefreshAccessTokenAsync(dto.refreshToken, dto.ipAddress, dto.deviceInfo);
+        return await authService.RefreshAccessTokenAsync(dto.RefreshToken, dto.IpAddress, dto.DeviceInfo);
     }
 }

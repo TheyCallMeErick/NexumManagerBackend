@@ -10,6 +10,8 @@ public static class CreateInMemoryDatabase
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
-        return new ApplicationDbContext(options);
+        var context = new ApplicationDbContext(options);
+        //context.Database.Migrate();
+        return context;
     }
 }

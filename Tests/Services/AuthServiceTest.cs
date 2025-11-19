@@ -2,7 +2,6 @@ using Application.DTOs.Inputs.Auth;
 using Application.Services.Interfaces;
 using Infrastructure.Auth;
 using Infrastructure.Data;
-using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Tests.Fakers;
@@ -43,12 +42,12 @@ public class AuthServiceTests : IDisposable
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _authService.ValidateUserCredentialsAsync(new UserCredentialsInputDTO
+        var result = await _authService.ValidateUserCredentialsAsync(new UserCredentialsInputDto
         (
-            email : user.Email!,
-            password : "TestPassword",
-            ip : "",
-            deviceInfo : "TestDevice"
+            Email : user.Email!,
+            Password : "TestPassword",
+            Ip : "",
+            DeviceInfo : "TestDevice"
         ));
 
         // Assert
@@ -66,12 +65,12 @@ public class AuthServiceTests : IDisposable
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
 
-        var authResult = await _authService.ValidateUserCredentialsAsync(new UserCredentialsInputDTO
+        var authResult = await _authService.ValidateUserCredentialsAsync(new UserCredentialsInputDto
         (
-            email : user.Email!,
-            password : "TestPassword",
-            ip : "",
-            deviceInfo : "TestDevice"
+            Email : user.Email!,
+            Password : "TestPassword",
+            Ip : "",
+            DeviceInfo : "TestDevice"
         ));
 
         Assert.True(authResult.Success);
@@ -79,7 +78,7 @@ public class AuthServiceTests : IDisposable
         Assert.NotEmpty(authResult.Data.AccessToken);
 
         // Act
-        var refreshResult = await _authService.RefreshAccessTokenAsync(authResult.Data.RefreshToken!);
+        var refreshResult = await _authService.RefreshAccessTokenAsync(authResult.Data.RefreshToken);
 
         // Assert
         Assert.True(refreshResult.Success);
@@ -111,12 +110,12 @@ public class AuthServiceTests : IDisposable
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _authService.ValidateUserCredentialsAsync(new UserCredentialsInputDTO
+        var result = await _authService.ValidateUserCredentialsAsync(new UserCredentialsInputDto
         (
-            email: user.Email!,
-            password: "WrongPassword",
-            ip: "",
-            deviceInfo: "TestDevice"
+            Email: user.Email!,
+            Password: "WrongPassword",
+            Ip: "",
+            DeviceInfo: "TestDevice"
         ));
 
         // Assert

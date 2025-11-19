@@ -5,22 +5,11 @@ using Domain.Data.Repositories;
 
 namespace Application.Commands.User;
 
-public class UserUpdateSelfDataCommand
+public class UserUpdateSelfDataCommand(IUserRepository userRepository, IHashService hashService, IFileStorage fileStorageProvider)
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IHashService _hashService;
-    private readonly IFileStorage _fileStorageProvider;
-
-    public UserUpdateSelfDataCommand(IUserRepository userRepository, IHashService hashService, IFileStorage fileStorageProvider)
+    public async Task<bool> Execute(UpdateSelfDataDto dto)
     {
-        _userRepository = userRepository;
-        _hashService = hashService;
-        _fileStorageProvider = fileStorageProvider;
-    }
-
-    public async Task<bool> Execute(UpdateSelfDataDTO dto)
-    {
-        var user = await _userRepository.FindById(dto.Id);
+        var user = await userRepository.FindById(dto.Id);
         if (user == null)
         {
             return false;
@@ -31,20 +20,20 @@ public class UserUpdateSelfDataCommand
         user.Email = dto.Email ?? user.Email;
         if (dto.Password != null)
         {
-            var PasswordHash = _hashService.HashPassword(dto.Password);
-            user.PasswordHash = PasswordHash ;
+            var passwordHash = hashService.HashPassword(dto.Password);
+            user.PasswordHash = passwordHash ;
         }
         if(dto.ProfilePicture != null)
         {
-           var ProfilePictureFileName = await _fileStorageProvider.WriteFileAsync(
+           var profilePictureFileName = await fileStorageProvider.WriteFileAsync(
             dto.ProfilePicture.OpenReadStream(),
             dto.ProfilePicture.FileName
             );
-            user.ProfilePictureFileName = ProfilePictureFileName;
+            user.ProfilePictureFileName = profilePictureFileName;
         }
         user.Username = dto.Username ?? user.Username;
         user.EnableNotifications = dto.EnableNotifications;
-        await _userRepository.Update(user);
+        await userRepository.Update(user);
         return true;
     }
 }

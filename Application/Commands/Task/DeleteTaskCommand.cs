@@ -4,25 +4,18 @@ using Domain.Enums;
 
 namespace Application.Commands.Task; 
 
-public class DeleteTaskCommand
+public class DeleteTaskCommand(ITaskRepository taskRepository)
 {
-    private readonly ITaskRepository _taskRepository;
-
-    public DeleteTaskCommand(ITaskRepository taskRepository)
+    public async Task<bool> Execute(DeleteTaskDto dto)
     {
-        _taskRepository = taskRepository;
-    }
-
-    public async Task<bool> Execute(DeleteTaskDTO dTO)
-    {
-        var task = await _taskRepository.FindById(dTO.TaskId);
+        var task = await taskRepository.FindById(dto.TaskId);
         if (task == null)
         {
             return false;
         }
         bool isAdminOrManager =
         task.Project.Members
-        .Any(x => x.UserId == dTO.CurrentUser &&
+        .Any(x => x.UserId == dto.CurrentUser &&
                   (x.Role == EProjectRole.Admin || x.Role == EProjectRole.Manager));
 
         if (!isAdminOrManager)
@@ -30,7 +23,7 @@ public class DeleteTaskCommand
             return false;
         }
 
-        await _taskRepository.Delete(task);
+        await taskRepository.Delete(task);
         return true;
     }
 }

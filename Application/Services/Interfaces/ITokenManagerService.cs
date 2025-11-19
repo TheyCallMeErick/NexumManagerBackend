@@ -8,7 +8,7 @@ namespace Application.Services.Interfaces;
 public interface ITokenManagerService
 {
     string GenerateAccessToken(User user);
-    Task<OperationResultDTO<UserAuthOutputDTO>> RenewRefreshToken(Guid userId, string ipAddress, string deviceInfo);
+    Task<OperationResultDto<UserAuthOutputDto>> RenewRefreshToken(Guid userId, string ipAddress, string deviceInfo);
 
-    Task<OperationResultDTO<string>> RefreshAccessToken(string token);
+    Task<OperationResultDto<string>> RefreshAccessToken(string token);
 }

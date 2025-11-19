@@ -51,23 +51,23 @@ public class TokenManagerService : ITokenManagerService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public async Task<OperationResultDTO<UserAuthOutputDTO>> RenewRefreshToken(Guid userId, string ipAddress, string deviceInfo)
+    public async Task<OperationResultDto<UserAuthOutputDto>> RenewRefreshToken(Guid userId, string ipAddress, string deviceInfo)
     {
         var oldRefreshToken = await context.RefreshTokens
             .FirstOrDefaultAsync(rt => rt.UserId == userId && !rt.IsRevoked && rt.ExpiresAt > DateTime.UtcNow);
         if (oldRefreshToken == null)
         {
-            return OperationResultDTO<UserAuthOutputDTO>
+            return OperationResultDto<UserAuthOutputDto>
                 .FailureResult("No valid refresh token found for the user.");
         }
         if (oldRefreshToken.ReplacedByToken != null)
         {
-            return OperationResultDTO<UserAuthOutputDTO>.FailureResult("This refresh token has already been used to generate a new refresh token.");
+            return OperationResultDto<UserAuthOutputDto>.FailureResult("This refresh token has already been used to generate a new refresh token.");
         }
         var user = oldRefreshToken.User;
         if (user == null)
         {
-            return OperationResultDTO<UserAuthOutputDTO>.FailureResult("User associated with the refresh token not found.");
+            return OperationResultDto<UserAuthOutputDto>.FailureResult("User associated with the refresh token not found.");
         }
         var newRefreshToken = new RefreshToken
         {
@@ -85,20 +85,20 @@ public class TokenManagerService : ITokenManagerService
         await context.SaveChangesAsync();
         var newAccessToken = GenerateAccessToken(user);
 
-        return OperationResultDTO<UserAuthOutputDTO>
+        return OperationResultDto<UserAuthOutputDto>
             .SuccessResult()
-            .WithData(new UserAuthOutputDTO
+            .WithData(new UserAuthOutputDto
             (
                 token: newAccessToken,
                 refreshToken: newRefreshToken.Token
             ));
     }
 
-    public async Task<OperationResultDTO<string>> RefreshAccessToken(string refreshToken)
+    public async Task<OperationResultDto<string>> RefreshAccessToken(string refreshToken)
     {
         if (string.IsNullOrWhiteSpace(refreshToken))
         {
-            return OperationResultDTO<string>.FailureResult("Token is null or empty.");
+            return OperationResultDto<string>.FailureResult("Token is null or empty.");
         }
         var validTokenResult = await context.RefreshTokens
             .AsNoTracking()
@@ -106,12 +106,12 @@ public class TokenManagerService : ITokenManagerService
 
         if (validTokenResult == null)
         {
-            return OperationResultDTO<string>.FailureResult("Invalid refresh token.");
+            return OperationResultDto<string>.FailureResult("Invalid refresh token.");
         }
 
         if (validTokenResult.IsRevoked || validTokenResult.ReplacedByToken != null || validTokenResult.ExpiresAt < DateTime.UtcNow)
         {
-            return OperationResultDTO<string>.FailureResult("Invalid or expired refresh token.");
+            return OperationResultDto<string>.FailureResult("Invalid or expired refresh token.");
         }
 
         var user = await context.Users
@@ -120,12 +120,12 @@ public class TokenManagerService : ITokenManagerService
 
         if (user == null)
         {
-            return OperationResultDTO<string>.FailureResult("User associated with the refresh token not found.");
+            return OperationResultDto<string>.FailureResult("User associated with the refresh token not found.");
         }
 
         var newAccessToken = GenerateAccessToken(user);
 
-        return OperationResultDTO<string>
+        return OperationResultDto<string>
             .SuccessResult()
             .WithData(newAccessToken);
     }

@@ -7,48 +7,39 @@ using Domain.Models;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Identity; 
+namespace Infrastructure.Auth; 
 
-public class AuthService : IAuthService
+public class AuthService(ApplicationDbContext context, ITokenManagerService tokenManager) : IAuthService
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ITokenManagerService _tokenManager;
-
-    public AuthService(ApplicationDbContext context, ITokenManagerService tokenManager)
+    public async Task<OperationResultDto<string>> RefreshAccessTokenAsync(string refreshToken)
     {
-        _context = context;
-        _tokenManager = tokenManager;
-    }
-
-    public async Task<OperationResultDTO<string>> RefreshAccessTokenAsync(string refreshToken)
-    {
-        var result = await _tokenManager.RefreshAccessToken(refreshToken);
+        var result = await tokenManager.RefreshAccessToken(refreshToken);
         if (!result.Success)
         {
-            return OperationResultDTO<string>.FailureResult(result.Message ?? "Failed to refresh token.");
+            return OperationResultDto<string>.FailureResult(result.Message ?? "Failed to refresh token.");
         }
-        return OperationResultDTO<string>
+        return OperationResultDto<string>
             .SuccessResult()
             .WithData(result.Data);
     }
 
-    public async Task<OperationResultDTO<UserAuthOutputDTO>> ValidateUserCredentialsAsync(UserCredentialsInputDTO dto)
+    public async Task<OperationResultDto<UserAuthOutputDto>> ValidateUserCredentialsAsync(UserCredentialsInputDto dto)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
+        var user = await context.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
         if (user == null)
         {
-            return OperationResultDTO<UserAuthOutputDTO>
+            return OperationResultDto<UserAuthOutputDto>
                 .FailureResult("Invalid email or password.");
         }
 
         var isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);
         if (!isPasswordValid)
         {
-            return OperationResultDTO<UserAuthOutputDTO>
+            return OperationResultDto<UserAuthOutputDto>
                 .FailureResult("Invalid email or password.");
         }
 
-        var accessToken = _tokenManager.GenerateAccessToken(user);
+        var accessToken = tokenManager.GenerateAccessToken(user);
         var refreshToken = new RefreshToken
         {
             UserId = user.Id,
@@ -58,40 +49,40 @@ public class AuthService : IAuthService
             DeviceInfo = dto.DeviceInfo
         };
 
-        _context.RefreshTokens.Add(refreshToken);
-        await _context.SaveChangesAsync();
+        context.RefreshTokens.Add(refreshToken);
+        await context.SaveChangesAsync();
 
-        return OperationResultDTO<UserAuthOutputDTO>
+        return OperationResultDto<UserAuthOutputDto>
             .SuccessResult()
-            .WithData(new UserAuthOutputDTO
+            .WithData(new UserAuthOutputDto
             (
-                token: accessToken,
-                refreshToken: refreshToken.Token
+                AccessToken: accessToken,
+                RefreshToken: refreshToken.Token
             ));
     }
 
-    public async Task<OperationResultDTO<UserAuthOutputDTO>> RefreshAccessTokenAsync(Guid refreshToken, string ipAddress, string deviceInfo)
+    public async Task<OperationResultDto<UserAuthOutputDto>> RefreshAccessTokenAsync(Guid refreshToken, string ipAddress, string deviceInfo)
     {
-        var result = await _tokenManager.RenewRefreshToken(refreshToken, ipAddress, deviceInfo);
+        var result = await tokenManager.RenewRefreshToken(refreshToken, ipAddress, deviceInfo);
         if (!result.Success)
         {
-            return OperationResultDTO<UserAuthOutputDTO>.FailureResult(result.Message ?? "Failed to refresh token.");
+            return OperationResultDto<UserAuthOutputDto>.FailureResult(result.Message ?? "Failed to refresh token.");
         }
-        return OperationResultDTO<UserAuthOutputDTO>
+        return OperationResultDto<UserAuthOutputDto>
             .SuccessResult()
             .WithData(result.Data);
     }
 
-    public async Task<OperationResultDTO<UserOutputDTO>> GetCurrentUserAsync(string userId)
+    public async Task<OperationResultDto<UserOutputDto>> GetCurrentUserAsync(string userId)
     {
-        var result = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+        var result = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
         if (result == null)
         {
-            return OperationResultDTO<UserOutputDTO>.FailureResult("Failed to get user from token.");
+            return OperationResultDto<UserOutputDto>.FailureResult("Failed to get user from token.");
         }
-        return OperationResultDTO<UserOutputDTO>
+        return OperationResultDto<UserOutputDto>
             .SuccessResult()
-            .WithData(new UserOutputDTO
+            .WithData(new UserOutputDto
             (
                 Id : result.Id,
                 Username : result.Username,

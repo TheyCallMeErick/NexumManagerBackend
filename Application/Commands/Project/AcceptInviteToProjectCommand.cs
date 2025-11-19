@@ -4,28 +4,17 @@ using Domain.Models;
 
 namespace Application.Commands.Project; 
 
-public class AcceptInviteToProjectCommand
+public class AcceptInviteToProjectCommand(IUserRepository userRepository, IUserInviteRepository userInviteRepository, IProjectRepository projectRepository)
 {
-    private readonly  IUserRepository _userRepository;
-    private readonly  IUserInviteRepository _userInviteRepository;
-    private readonly  IProjectRepository _projectRepository;
-
-    public AcceptInviteToProjectCommand(IUserRepository userRepository, IUserInviteRepository userInviteRepository, IProjectRepository projectRepository)
+    public async Task<bool> Execute(AcceptInviteToProjectDto dto)
     {
-        _userRepository = userRepository;
-        _userInviteRepository = userInviteRepository;
-        _projectRepository = projectRepository;
-    }
-
-    public async Task<bool> Execute(AcceptInviteToProjectDTO dto)
-    {
-        var user = await _userRepository.FindById(dto.CurrentUser);
+        var user = await userRepository.FindById(dto.CurrentUser);
         if (user == null)
         {
             return false;
         }
 
-        var invite = await _userInviteRepository.FindById(dto.InviteId);
+        var invite = await userInviteRepository.FindById(dto.InviteId);
         if (invite == null)
         {
             return false;
@@ -34,21 +23,21 @@ public class AcceptInviteToProjectCommand
         {
             return false;
         }
-        var project = await _projectRepository.FindById(invite.ProjectId);
+        var project = await projectRepository.FindById(invite.ProjectId);
         if(project == null)
         {
             return false;
         }
 
-        var UserOnProject = new UserOnProject
+        var userOnProject = new UserOnProject
         {
             Role = invite.Role,
             Project = project,
             User = invite.User
         };
 
-        project.Members.Append(UserOnProject);
-        await _projectRepository.Update(project);
+        project.Members.Add(userOnProject);
+        await projectRepository.Update(project);
         return true;
     }
 }

@@ -1,21 +1,13 @@
-using System.Threading.Tasks;
 using Domain.Data.Repositories;
 using Domain.Enums;
 
 namespace Application.Commands.Project; 
 
-public class DeleteProjectCommand
+public class DeleteProjectCommand(IProjectRepository projectRepository)
 {
-    private readonly IProjectRepository _projectRepository;
-
-    public DeleteProjectCommand(IProjectRepository projectRepository)
-    {
-        _projectRepository = projectRepository;
-    }
-
     public async Task<bool> Execute(Guid projectId, Guid userId)
     {
-        var project = await _projectRepository.FindById(projectId);
+        var project = await projectRepository.FindById(projectId);
         if (project == null)
         {
             return false;
@@ -25,7 +17,7 @@ public class DeleteProjectCommand
         {
             return false;
         }
-        await _projectRepository.Delete(project);
+        await projectRepository.Delete(project);
         return true;
     }
 }

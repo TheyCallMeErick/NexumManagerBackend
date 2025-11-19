@@ -34,7 +34,7 @@ public class CreateProjectCommandTest
         _dbContext.Users.Add(user);
         _dbContext.SaveChanges();
 
-        var data = new CreateProjectInputDTO(
+        var data = new CreateProjectInputDto(
             ProjectDescription: "Lipsum",
             ProjectName: "Lipsum",
             CurrentUserId: user.Id
@@ -58,7 +58,7 @@ public class CreateProjectCommandTest
     public async Task GivenInvalidData_WhenExecuteIsCalled_ThenShouldntCreate()
     {
         //Arrange
-        var data = new CreateProjectInputDTO(
+        var data = new CreateProjectInputDto(
             ProjectDescription: "",
             ProjectName: "",
             CurrentUserId: Guid.Empty

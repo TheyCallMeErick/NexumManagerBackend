@@ -5,17 +5,10 @@ using Application.Services.Interfaces;
 
 namespace Application.Commands.Auth;
 
-public class ValidateUserCredentialsCommand
+public class ValidateUserCredentialsCommand(IAuthService authService)
 {
-    private readonly IAuthService _authService;
-
-    public ValidateUserCredentialsCommand(IAuthService authService)
+    public async Task<OperationResultDto<UserAuthOutputDto>> Execute(UserCredentialsInputDto dto)
     {
-        _authService = authService;
-    }
-
-    public async Task<OperationResultDTO<UserAuthOutputDTO>> Execute(UserCredentialsInputDTO dto)
-    {
-        return await _authService.ValidateUserCredentialsAsync(dto); 
+        return await authService.ValidateUserCredentialsAsync(dto); 
     }
 }

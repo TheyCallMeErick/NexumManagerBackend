@@ -1,0 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
+namespace Application.DTOs.Inputs.User;
+
+public record UpdateSelfDataDto(Guid Id, string? Username, string? Name, string? Email, string? Password, IFormFile? ProfilePicture, bool EnableNotifications = false);

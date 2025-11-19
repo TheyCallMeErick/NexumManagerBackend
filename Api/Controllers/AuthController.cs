@@ -26,7 +26,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(typeof(ResponseLoginDTO), 200)]
     public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequest, [FromServices] ValidateUserCredentialsCommand command)
     {
-        var result = await command.Execute(new UserCredentialsInputDTO
+        var result = await command.Execute(new UserCredentialsInputDto
         (
             email: loginRequest.Email,
             password: loginRequest.Password,
@@ -72,10 +72,10 @@ public class AuthController : ControllerBase
             return BadRequest("Refresh token is required.");
         }
         var result = await command.Execute(
-            new RenewRefreshTokenInputDTO(
-                refreshToken: Guid.Parse(refreshToken),
-                deviceInfo: HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty,
-                ipAddress: HttpContext.Request.Headers["User-Agent"].ToString()
+            new RenewRefreshTokenInputDto(
+                RefreshToken: Guid.Parse(refreshToken),
+                DeviceInfo: HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty,
+                IpAddress: HttpContext.Request.Headers["User-Agent"].ToString()
             )
         );
         if (!result.Success)

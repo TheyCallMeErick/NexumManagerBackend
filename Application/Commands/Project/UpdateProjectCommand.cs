@@ -1,16 +1,13 @@
-using System.Threading.Tasks;
 using Application.DTOs.Inputs.Project;
 using Domain.Data.Repositories;
 
 namespace Application.Commands.Project; 
 
-public class UpdateProjectCommand
+public class UpdateProjectCommand(IProjectRepository projectRepository)
 {
-    private readonly IProjectRepository _projectRepository;
-
-    public async Task<bool> Execute(UpdateProjectInputDTO dto)
+    public async Task<bool> Execute(UpdateProjectInputDto dto)
     {
-        var project = await _projectRepository.FindById(dto.projectId);
+        var project = await projectRepository.FindById(dto.ProjectId);
         if (project == null)
         {
             return false;
@@ -18,7 +15,7 @@ public class UpdateProjectCommand
         project.Title = dto.ProjectName;
         project.Description = dto.ProjectDescription;
 
-        await _projectRepository.Update(project);
+        await projectRepository.Update(project);
         return true;
     }
 }

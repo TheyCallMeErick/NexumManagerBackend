@@ -5,20 +5,11 @@ using Domain.Models;
 
 namespace Application.Commands.Project; 
 
-public class InviteUserToProjectCommand
+public class InviteUserToProjectCommand(IProjectRepository projectRepository, IUserRepository userRepository)
 {
-    public readonly IProjectRepository _projectRepository;
-    public readonly IUserRepository _userRepository;
-
-    public InviteUserToProjectCommand(IProjectRepository projectRepository, IUserRepository userRepository)
+    public async Task<bool> Execute(InviteUserToProjectInputDto dto)
     {
-        _projectRepository = projectRepository;
-        _userRepository = userRepository;
-    }
-
-    public async Task<bool> Execute(InviteUserToProjectInputDTO dto)
-    {
-        var project = await _projectRepository.FindById(dto.Project);
+        var project = await projectRepository.FindById(dto.Project);
         if (project == null)
         {
             return false;
@@ -36,7 +27,7 @@ public class InviteUserToProjectCommand
         {
             return false;
         }
-        var user = await _userRepository.FindById(dto.UserInvited);
+        var user = await userRepository.FindById(dto.UserInvited);
         if(user == null)
         {
             return false;
